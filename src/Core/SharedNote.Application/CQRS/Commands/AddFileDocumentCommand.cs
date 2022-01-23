@@ -23,14 +23,16 @@ namespace SharedNote.Application.CQRS.Commands
         public int DepartmentId { get; set; }
         public class AddFileDocumentCommandHandler : IRequestHandler<AddFileDocumentCommand, IResponse>
         {
-            private IHostingEnvironment _env;
-            private IUnitOfWork _unitOfWork;
-            private IMapper _mapper;
-            public AddFileDocumentCommandHandler(IHostingEnvironment env, IUnitOfWork unitOfWork, IMapper mapper)
+            private readonly IHostingEnvironment _env;
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IMapper _mapper;
+            private readonly ICacheManager _cacheManager;
+            public AddFileDocumentCommandHandler(IHostingEnvironment env, IUnitOfWork unitOfWork, IMapper mapper, ICacheManager cacheManager)
             {
                 _env = env;
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
+                _cacheManager = cacheManager;
             }
             public async Task<IResponse> Handle(AddFileDocumentCommand request, CancellationToken cancellationToken)
             {
@@ -46,7 +48,12 @@ namespace SharedNote.Application.CQRS.Commands
                 var result = await _unitOfWork.CompleteAsync();
 
                 await Task.CompletedTask;
-                return result ? new SuccessResponse("Dosya Yüklendi") : new ErrorResponse("Dosya Yüklenemedi");
+                if (result)
+                {
+                    _cacheManager.RemoveSameCache("FileDocument");
+                    return new SuccessResponse("Dosya Yüklendi");
+                }
+                return new ErrorResponse("Dosya Yüklenemedi");
                 
             }
         }

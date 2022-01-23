@@ -42,6 +42,7 @@ namespace ShareableNote.API
             
             services.AddApplicationService();
             services.AddPressitenceService();
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

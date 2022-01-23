@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SharedNote.Domain.Entites;
 
 namespace SharedNote.Application.CQRS.Queries
 {
@@ -19,14 +20,22 @@ namespace SharedNote.Application.CQRS.Queries
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;
-            public GetAllCollegeQueriesHandler(IUnitOfWork unitOfWork, IMapper mapper)
+            private readonly ICacheManager _cache;
+            public GetAllCollegeQueriesHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheManager cache)
             {
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
+                _cache = cache;
             }
             public async Task<IDataResponse<List<CollegeDto>>> Handle(GetAllCollegeQueries request, CancellationToken cancellationToken)
             {
-                var result = await _unitOfWork.collegeRepository.GetAllAsync();
+                //var result = await _unitOfWork.collegeRepository.GetAllAsync();
+                //var dest = _mapper.Map<List<CollegeDto>>(result);
+                //return new SuccessDataResponse<List<CollegeDto>>(dest, "Tüm üniversiteler getirildi");
+                var result = await _cache.GetOrCreateAsync("college_get_all", async () =>
+                {
+                    return await _unitOfWork.collegeRepository.GetAllAsync();
+                },200);
                 var dest = _mapper.Map<List<CollegeDto>>(result);
                 return new SuccessDataResponse<List<CollegeDto>>(dest, "Tüm üniversiteler getirildi");
             }

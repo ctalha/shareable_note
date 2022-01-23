@@ -15,7 +15,7 @@ namespace SharedNotes.Persistence
 {
     public static class PresistenceService
     {
-        // Database IConfiguration al 
+       
         public static IConfiguration Configuration { get; }
         public static void AddPressitenceService(this IServiceCollection services)
         {
@@ -23,6 +23,8 @@ namespace SharedNotes.Persistence
             {
                 cfg.UseSqlServer("Data Source = localhost; Initial Catalog = SHARED_NOTE; User ID = sa; Password = sql123");
             });
+
+            //dependency registers
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }

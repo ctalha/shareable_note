@@ -19,14 +19,20 @@ namespace SharedNote.Application.CQRS.Queries
         {
             private readonly IUnitOfWork _unitOfWork;
             private IMapper _mapper;
-            public GetCollegeByIdHandler(IUnitOfWork unitOfWork, IMapper mapper)
+            private readonly ICacheManager _cacheManager;
+            public GetCollegeByIdHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheManager cacheManager)
             {
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
+                _cacheManager = cacheManager;
             }
             public async Task<IDataResponse<CollegeDto>> Handle(GetCollegeByIdQueries request, CancellationToken cancellationToken)
             {
-                var result = await _unitOfWork.collegeRepository.GetByIdAsync(request.Id);
+                var result = await _cacheManager.GetOrCreateAsync("college_get_by_"+request.Id, async () =>
+                {
+                    return await _unitOfWork.collegeRepository.GetByIdAsync(request.Id);
+                });
+             //   var result = await _unitOfWork.collegeRepository.GetByIdAsync(request.Id);
                 var dest = _mapper.Map<CollegeDto>(result);
                 return new SuccessDataResponse<CollegeDto>(dest, "İstenilen üniversite getirildi");
             }

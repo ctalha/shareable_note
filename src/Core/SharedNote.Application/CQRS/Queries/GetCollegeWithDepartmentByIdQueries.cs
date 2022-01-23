@@ -19,14 +19,20 @@ namespace SharedNote.Application.CQRS.Queries
         {
             private readonly IUnitOfWork _unitOfWork;
             private IMapper _mapper;
-            public GetCollegeWithDepartmentByIdHandler(IUnitOfWork unitOfWork, IMapper mapper)
+            private readonly ICacheManager _cacheManager;
+            public GetCollegeWithDepartmentByIdHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheManager cacheManager)
             {
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
+                _cacheManager = cacheManager;
             }
             public async Task<IDataResponse<CollegeWithDepartmentDto>> Handle(GetCollegeWithDepartmentByIdQueries request, CancellationToken cancellationToken)
             {
-                var result = await _unitOfWork.collegeRepository.GetCollegesWithDepartmentByIdAsync(request.Id);
+                var result = await _cacheManager.GetOrCreateAsync("college_get_with_department_by_"+request.Id , async () =>
+                {
+                    return await _unitOfWork.collegeRepository.GetCollegesWithDepartmentByIdAsync(request.Id);
+                });
+                //var result = await _unitOfWork.collegeRepository.GetCollegesWithDepartmentByIdAsync(request.Id);
                 var dest = _mapper.Map<CollegeWithDepartmentDto>(result);
                 return new SuccessDataResponse<CollegeWithDepartmentDto>(dest);
             }

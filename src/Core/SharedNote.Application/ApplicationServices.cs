@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using SharedNote.Application.Interfaces.Common;
+using SharedNote.Application.Caching;
 
 namespace SharedNote.Application
 {
@@ -18,7 +20,7 @@ namespace SharedNote.Application
             var assembly = Assembly.GetExecutingAssembly();
             services.AddAutoMapper(assembly);
             services.AddMediatR(assembly);
-           
+            services.AddSingleton<ICacheManager, InMemoryCacheManager>();
         }
     }
 }
