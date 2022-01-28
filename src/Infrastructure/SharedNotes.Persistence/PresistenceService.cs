@@ -22,6 +22,7 @@ namespace SharedNotes.Persistence
             services.AddDbContext<ApplicationDbContext>(cfg => 
             {
                 cfg.UseSqlServer("Data Source = localhost; Initial Catalog = SHARED_NOTE; User ID = sa; Password = sql123");
+                cfg.EnableSensitiveDataLogging();
             });
 
             //dependency registers

@@ -12,7 +12,8 @@ namespace SharedNote.Application
     {
         public static IApplicationBuilder AddApplicationBuilder(this IApplicationBuilder builder)
         {
-            builder.UseMiddleware<CustomExceptionMiddleware>();
+            builder.UseMiddleware<RequestResponseLoggingMiddleware>();
+            builder.UseMiddleware<ExceptionMiddleware>();
             return builder;
         }
     }

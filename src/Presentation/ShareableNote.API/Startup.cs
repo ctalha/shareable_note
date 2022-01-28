@@ -42,6 +42,7 @@ namespace ShareableNote.API
             
             services.AddApplicationService();
             services.AddPressitenceService();
+            services.AddLogging();
             services.AddMemoryCache();
         }
 
@@ -54,13 +55,11 @@ namespace ShareableNote.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShareableNote.API v1"));
             }
-            app.AddApplicationBuilder();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseAuthorization();
-
+            app.AddApplicationBuilder();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using SharedNote.Application.CQRS.Queries;
+using SharedNote.Application.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,19 +25,20 @@ namespace ShareableNote.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new GetAllCollegeQueries());
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return result.IsSuccess ? StatusCode(200, result) : BadRequest(result);
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
+       
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetCollegeByIdQueries { Id = id});
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return result.IsSuccess ? StatusCode(200,result) : BadRequest(result);
         }
-        [HttpGet("department{id}")]
+        [HttpGet("{id:int}/department")]
         public async Task<IActionResult> GetWithDepartmentById(int id)
         {
             var result = await _mediator.Send(new GetCollegeWithDepartmentByIdQueries { Id = id });
-            return result.IsSuccess ? Ok(result) : BadRequest(result); 
+            return result.IsSuccess ? StatusCode(200, result) : BadRequest(result); 
         }
     }
 }

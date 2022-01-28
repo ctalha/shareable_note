@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SharedNote.Domain.Entites;
+using SharedNote.Application.Exceptions;
 
 namespace SharedNote.Application.CQRS.Queries
 {
@@ -29,13 +30,15 @@ namespace SharedNote.Application.CQRS.Queries
             }
             public async Task<IDataResponse<List<CollegeDto>>> Handle(GetAllCollegeQueries request, CancellationToken cancellationToken)
             {
-                //var result = await _unitOfWork.collegeRepository.GetAllAsync();
-                //var dest = _mapper.Map<List<CollegeDto>>(result);
-                //return new SuccessDataResponse<List<CollegeDto>>(dest, "Tüm üniversiteler getirildi");
+
                 var result = await _cache.GetOrCreateAsync("college_get_all", async () =>
                 {
                     return await _unitOfWork.collegeRepository.GetAllAsync();
-                },200);
+                });
+                if (result == null)
+                {
+                    throw new BaseException(404, "Not Found", "Üniversiteler Bulunamadı");
+                }
                 var dest = _mapper.Map<List<CollegeDto>>(result);
                 return new SuccessDataResponse<List<CollegeDto>>(dest, "Tüm üniversiteler getirildi");
             }

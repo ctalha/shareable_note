@@ -13,15 +13,15 @@ namespace SharedNote.Application.Valdiations.FluentValidation.BaseValidator
         public FileValidator()
         {
 
-            RuleFor(x => x.ContentType).NotNull().Must(
-                x => x.Equals("image/jpeg") ||
-                x.Equals("image/png") ||
-                x.Equals("image/jpeg") ||
-                x.Equals("application/pdf ") ||
-                x.Equals("application/zip") ||
-                x.Equals("application/octet-stream")
-                )
-                .WithMessage("Desteklenmeyen Dosya Türü");
+            //RuleFor(x => x.ContentType).NotNull().Must(
+            //    x => x.Equals("image/jpeg") ||
+            //    x.Equals("image/png") ||
+            //    x.Equals("image/jpeg") ||
+            //    x.Equals("application/pdf ") ||
+            //    x.Equals("application/zip") ||
+            //    x.Equals("application/octet-stream")
+            //    )
+            //    .WithMessage("Desteklenmeyen Dosya Türü");
         }
     }
 }

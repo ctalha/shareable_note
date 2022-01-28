@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SharedNote.Application.Exceptions;
 
 namespace SharedNote.Application.CQRS.Queries
 {
@@ -32,7 +33,10 @@ namespace SharedNote.Application.CQRS.Queries
                 {
                     return await _unitOfWork.collegeRepository.GetByIdAsync(request.Id);
                 });
-             //   var result = await _unitOfWork.collegeRepository.GetByIdAsync(request.Id);
+                if (result == null)
+                {
+                    throw new BaseException(404, "Not Found", "Üniversite Bulunamadı");
+                }
                 var dest = _mapper.Map<CollegeDto>(result);
                 return new SuccessDataResponse<CollegeDto>(dest, "İstenilen üniversite getirildi");
             }

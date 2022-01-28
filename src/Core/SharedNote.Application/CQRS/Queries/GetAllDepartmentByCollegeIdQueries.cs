@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SharedNote.Application.Exceptions;
 
 namespace SharedNote.Application.CQRS.Queries
 {
@@ -32,7 +33,10 @@ namespace SharedNote.Application.CQRS.Queries
                 {
                     return await _unitOfWork.departmentRepository.GetAllDepartmentsByCollegeIdAsync(request.CollegeId);
                 });
-                //var result = await _unitOfWork.departmentRepository.GetAllDepartmentsByCollegeIdAsync(request.CollegeId);
+                if (result.Count <= 0)
+                {
+                    throw new BaseException(404, "Not Found", "Üniversite Bölümleri Bulunamadı");
+                }
                 return new SuccessDataResponse<List<DepartmentDto>>(_mapper.Map<List<DepartmentDto>>(result), "Bölümler getirildi");
             }
         }
