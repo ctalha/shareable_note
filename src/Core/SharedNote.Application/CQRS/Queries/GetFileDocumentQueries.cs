@@ -26,9 +26,9 @@ namespace SharedNote.Application.CQRS.Queries
             }
             public async Task<IDataResponse<FileResponseModel>> Handle(GetFileDocumentQueries request, CancellationToken cancellationToken)
             {
-                var result = await _unitOfWork.fileDocumentRespository.GetByIdAsync(request.Id);
+                var result = await _unitOfWork.FileDocumentRespository.GetByIdAsync(request.Id);
                 var data = await FileHelper.DownloadFileAsync(result);
-                return new SuccessDataResponse<FileResponseModel>(data);
+                return new SuccessDataResponse<FileResponseModel>(data,200);
             }
         }
     }

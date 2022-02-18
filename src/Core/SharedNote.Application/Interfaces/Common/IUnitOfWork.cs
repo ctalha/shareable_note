@@ -9,9 +9,10 @@ namespace SharedNote.Application.Interfaces.Common
 {
     public interface IUnitOfWork : IAsyncDisposable
     {
-        ICollegeRepository collegeRepository { get; }
-        IDepartmentRepository departmentRepository { get; }
-        IFileDocumentRespository fileDocumentRespository { get; }
+        ICollegeRepository CollegeRepository { get; }
+        IDepartmentRepository DepartmentRepository { get; }
+        IFileDocumentRespository FileDocumentRespository { get; }
+        IUserRepository UserRepository { get; }
         Task<bool> CompleteAsync();
 
     }

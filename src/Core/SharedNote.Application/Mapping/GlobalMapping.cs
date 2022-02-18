@@ -27,6 +27,12 @@ namespace SharedNote.Application.Mapping
                 .ForMember(p => p.Extension, opt => opt.MapFrom(s => s.Extension))
                 .ForMember(p => p.DirectoryName, opt => opt.MapFrom(s => s.DirectoryName))
                 .ForMember(p => p.FullName, opt => opt.MapFrom(s => s.FullPath)).ReverseMap();
+            CreateMap<RegisterUserCommand, User>()
+                .ForMember(p => p.UserName, opt => opt.MapFrom(s => s.Name))
+                .ForMember(p => p.Email, opt => opt.MapFrom(s => s.Email))
+                .ForMember(p => p.PasswordHash, opt => opt.MapFrom(s => s.Password)).ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
+
         }
     }
 }

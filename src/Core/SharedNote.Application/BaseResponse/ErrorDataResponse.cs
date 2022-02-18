@@ -11,15 +11,18 @@ namespace SharedNote.Application.BaseResponse
         public T Data { get; set; }
         public string Message { get; set; }
         public bool IsSuccess { get; set; }
-        public ErrorDataResponse(T data, string message)
+        public int StatusCode { get; set; }
+        public ErrorDataResponse(T data, string message,int statusCode)
         {
             Data = data;
             Message = message;
             IsSuccess = false;
+            StatusCode = statusCode;
         }
-        public ErrorDataResponse(T data) : this(data, null)
+        public ErrorDataResponse(T data,int statusCode) : this(data, null,statusCode)
         {
             Data = data;
+            StatusCode = statusCode;
         }
 
     }

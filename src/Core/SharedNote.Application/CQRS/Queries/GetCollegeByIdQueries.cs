@@ -19,7 +19,7 @@ namespace SharedNote.Application.CQRS.Queries
         public class GetCollegeByIdHandler : IRequestHandler<GetCollegeByIdQueries, IDataResponse<CollegeDto>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private IMapper _mapper;
+            private readonly IMapper _mapper;
             private readonly ICacheManager _cacheManager;
             public GetCollegeByIdHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheManager cacheManager)
             {
@@ -31,14 +31,14 @@ namespace SharedNote.Application.CQRS.Queries
             {
                 var result = await _cacheManager.GetOrCreateAsync("college_get_by_"+request.Id, async () =>
                 {
-                    return await _unitOfWork.collegeRepository.GetByIdAsync(request.Id);
+                    return await _unitOfWork.CollegeRepository.GetByIdAsync(request.Id);
                 });
                 if (result == null)
                 {
-                    throw new BaseException(404, "Not Found", "Üniversite Bulunamadı");
+                    return new ErrorDataResponse<CollegeDto>(null, "Üniversite bulunamadı.", 404);
                 }
                 var dest = _mapper.Map<CollegeDto>(result);
-                return new SuccessDataResponse<CollegeDto>(dest, "İstenilen üniversite getirildi");
+                return new SuccessDataResponse<CollegeDto>(dest, "İstenilen üniversite getirildi",200);
             }
         }
     }

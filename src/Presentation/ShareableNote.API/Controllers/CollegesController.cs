@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -21,6 +22,7 @@ namespace ShareableNote.API.Controllers
             _mediator = mediator;
         }
 
+        [Authorize(Roles = "nember")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

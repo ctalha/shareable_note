@@ -19,7 +19,7 @@ namespace SharedNote.Application.CQRS.Queries
         public class GetCollegeWithDepartmentByIdHandler : IRequestHandler<GetCollegeWithDepartmentByIdQueries, IDataResponse<CollegeWithDepartmentDto>>
         {
             private readonly IUnitOfWork _unitOfWork;
-            private IMapper _mapper;
+            private readonly IMapper _mapper;
             private readonly ICacheManager _cacheManager;
             public GetCollegeWithDepartmentByIdHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheManager cacheManager)
             {
@@ -31,14 +31,14 @@ namespace SharedNote.Application.CQRS.Queries
             {
                 var result = await _cacheManager.GetOrCreateAsync("college_get_with_department_by_"+request.Id , async () =>
                 {
-                    return await _unitOfWork.collegeRepository.GetCollegesWithDepartmentByIdAsync(request.Id);
+                    return await _unitOfWork.CollegeRepository.GetCollegesWithDepartmentByIdAsync(request.Id);
                 });
                 if (result == null)
                 {
-                    throw new BaseException(404, "Not Found", "Üniversite ve Bölümleri Getirilemedi");
+                    return new ErrorDataResponse<CollegeWithDepartmentDto>(null, "Üniversite ve Bölümleri Getirilemedi",404);
                 }
                 var dest = _mapper.Map<CollegeWithDepartmentDto>(result);
-                return new SuccessDataResponse<CollegeWithDepartmentDto>(dest, "Üniversite ve Bölümleri Listelendi");
+                return new SuccessDataResponse<CollegeWithDepartmentDto>(dest, "Üniversite ve Bölümleri Listelendi",200);
             }
         }
     }

@@ -31,13 +31,13 @@ namespace SharedNote.Application.CQRS.Queries
             {
                 var result = await _cacheManager.GetOrCreateAsync("department_get_all_by_"+request.CollegeId, async () =>
                 {
-                    return await _unitOfWork.departmentRepository.GetAllDepartmentsByCollegeIdAsync(request.CollegeId);
+                    return await _unitOfWork.DepartmentRepository.GetAllDepartmentsByCollegeIdAsync(request.CollegeId);
                 });
                 if (result.Count <= 0)
                 {
-                    throw new BaseException(404, "Not Found", "Üniversite Bölümleri Bulunamadı");
+                    return new ErrorDataResponse<List<DepartmentDto>>(null,"Üniversite Bölümleri Bulunamadı",404);
                 }
-                return new SuccessDataResponse<List<DepartmentDto>>(_mapper.Map<List<DepartmentDto>>(result), "Bölümler getirildi");
+                return new SuccessDataResponse<List<DepartmentDto>>(_mapper.Map<List<DepartmentDto>>(result), "Bölümler getirildi",200);
             }
         }
     }

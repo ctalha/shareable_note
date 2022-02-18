@@ -16,74 +16,68 @@ using SharedNote.Application.Valdiations.FluentValidation;
 
 namespace SharedNote.Application.Middleware
 {
+
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-
-        public ExceptionMiddleware(RequestDelegate next)
+        private readonly ILogger<ExceptionMiddleware> _logger;
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext httpContext)
         {
             try
             {
-                await _next(context);
+                await _next(httpContext);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                await HandleException(context, e);
+                _logger.LogError("Error->{@Error}", ex);
+                await HandleExceptionAsync(httpContext, ex);
             }
         }
-        private async Task HandleException(HttpContext context, Exception e)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            Type type = e.GetType();
 
-            string json = ConvertJsonData(e,type,context);
-            await context.Response.WriteAsync(json);
-        }
-        private string ConvertJsonData(Exception e, Type type,HttpContext context)
-        {
-  
-            string json="";
-            if (type == typeof(BaseException))
+            if(exception.GetType() == typeof(ValidationException))
             {
-                context.Response.StatusCode = (int)type.GetProperty("StatusCode").GetValue(e);
-                json = JsonConvert.SerializeObject(new ExceptionReponse
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var json = JsonConvert.SerializeObject(new ValidationExceptionResponse()
                 {
-                    IsSuccess = (bool)type.GetProperty("IsSuccess").GetValue(e),
-                    StatusCode = (int)type.GetProperty("StatusCode").GetValue(e),
-                    Message = (string)type.GetProperty("Messages").GetValue(e),
-                    Description = (string)type.GetProperty("Description").GetValue(e),               
-                });
-            }
-            else if (type == typeof(ValidationException))
-            {
-                context.Response.StatusCode = 400;
-                json = JsonConvert.SerializeObject(new ValidationExceptionResponse
-                {
-                    IsSuccess = false,
                     StatusCode = 400,
-                    Message = "Validation Error",
-                    Errors = ((ValidationException)e).Errors.ToList().Select(p => new ValidationResponse
+                    Errors = ((ValidationException)exception).Errors.ToList().Select(p => new ValidationResponse
                     {
                         PropertyName = p.PropertyName,
                         ErrorMessage = p.ErrorMessage
-                    })
+                    }),
+                    IsSuccess = false,
+                    Message = "Validation Error"
                 });
+                await context.Response.WriteAsync(json);
             }
+
             else
             {
-                context.Response.StatusCode = 500;
-                json = JsonConvert.SerializeObject(new ExceptionReponse
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await context.Response.WriteAsync(new ErrorDetails()
                 {
-                    IsSuccess = (bool)type.GetProperty("IsSuccess").GetValue(e),
-                    StatusCode = 500,
-                    Message = "International Server Error",
-                });
+                    StatusCode = context.Response.StatusCode,
+                    Message = exception.Message
+                }.ToString());
             }
-            return json;
+        }
+
+    }
+    public class ErrorDetails
+    {
+        public int StatusCode { get; set; }
+        public string Message { get; set; }
+        public override string ToString()
+        {
+            return System.Text.Json.JsonSerializer.Serialize(this);
         }
     }
 }

@@ -44,16 +44,16 @@ namespace SharedNote.Application.CQRS.Commands
                 dest.CreateDate = DateTime.Now;
                 dest.ContentType = request.File.ContentType;
 
-                await _unitOfWork.fileDocumentRespository.AddAsync(dest);
+                await _unitOfWork.FileDocumentRespository.AddAsync(dest);
                 var result = await _unitOfWork.CompleteAsync();
 
                 await Task.CompletedTask;
                 if (result)
                 {
                     _cacheManager.RemoveSameCache("FileDocument");
-                    return new SuccessResponse("Dosya Yüklendi");
+                    return new SuccessResponse("Dosya Yüklendi",200);
                 }
-                return new ErrorResponse("Dosya Yüklenemedi");
+                return new ErrorResponse("Dosya Yüklenemedi",200);
                 
             }
         }

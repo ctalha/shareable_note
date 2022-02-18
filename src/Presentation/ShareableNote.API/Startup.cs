@@ -17,6 +17,13 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using SharedNote.Application.Valdiations.FluentValidation.BaseValidator;
 using SharedNote.Application.Valdiations.FluentValidation;
+using SharedNote.Domain.Entites;
+using SharedNotes.Persistence.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using SharedNote.Application.Security;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ShareableNote.API
 {
@@ -39,7 +46,39 @@ namespace ShareableNote.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShareableNote.API", Version = "v1" });
             });
+
+            services.Configure<TokenOption>(Configuration.GetSection("TokenOption"));
+
+            services.AddIdentity<User, UserRole>(Opt =>
+            {
+                Opt.User.RequireUniqueEmail = true;
+                Opt.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+            {
+                var tokenOptions = Configuration.GetSection("TokenOption").Get<TokenOption>();
             
+
+                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                {
+                    ValidIssuer = tokenOptions.Issuer,
+                    ValidAudience = tokenOptions.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey)),
+
+                    ValidateIssuerSigningKey = true,
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
             services.AddApplicationService();
             services.AddPressitenceService();
             services.AddLogging();
@@ -58,6 +97,7 @@ namespace ShareableNote.API
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.AddApplicationBuilder();
             app.UseEndpoints(endpoints =>

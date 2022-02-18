@@ -33,14 +33,14 @@ namespace SharedNote.Application.CQRS.Queries
 
                 var result = await _cache.GetOrCreateAsync("college_get_all", async () =>
                 {
-                    return await _unitOfWork.collegeRepository.GetAllAsync();
+                    return await _unitOfWork.CollegeRepository.GetAllAsync();
                 });
                 if (result == null)
                 {
-                    throw new BaseException(404, "Not Found", "Üniversiteler Bulunamadı");
+                    return new ErrorDataResponse<List<CollegeDto>>(null,"Üniversiteler Bulunamadı",404);
                 }
                 var dest = _mapper.Map<List<CollegeDto>>(result);
-                return new SuccessDataResponse<List<CollegeDto>>(dest, "Tüm üniversiteler getirildi");
+                return new SuccessDataResponse<List<CollegeDto>>(dest, "Tüm üniversiteler getirildi",200);
             }
         }
     }

@@ -17,14 +17,13 @@ namespace SharedNote.Application.Middleware
 {
     public class RequestResponseLoggingMiddleware
     {
+        
         private readonly RequestDelegate _next;
-        private readonly ILogger<RequestResponseLoggingMiddleware> _logger;
-        private static LoggingResponse loggingResponse = new LoggingResponse();
-        Stopwatch stopwatch = new Stopwatch();
-        public RequestResponseLoggingMiddleware(RequestDelegate next, ILogger<RequestResponseLoggingMiddleware> logger)
+        private static LoggingResponse loggingResponse = new();
+        Stopwatch stopwatch = new();
+        public RequestResponseLoggingMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -40,8 +39,8 @@ namespace SharedNote.Application.Middleware
             var originalBodyStream = context.Response.Body;
 
             //Create a new memory stream...
-            using (var responseBody = new MemoryStream())
-            {
+            using var responseBody = new MemoryStream();
+
                 //...and use that for the temporary response body
                 context.Response.Body = responseBody;
 
@@ -61,7 +60,7 @@ namespace SharedNote.Application.Middleware
                 Log.Information("R-R");
                 Log.Information("Request-Reponse {@LoggingInformation}", loggingResponse);
                 await responseBody.CopyToAsync(originalBodyStream);
-            }
+
         }
 
         private async Task<string> FormatRequest(HttpRequest request)

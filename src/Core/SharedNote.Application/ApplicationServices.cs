@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using SharedNote.Application.Interfaces.Common;
 using SharedNote.Application.Caching;
+using SharedNote.Application.Security;
 
 namespace SharedNote.Application
 {
-    // öRNEK SERVİCES REGISTERION İŞLEMİ
     public static class ApplicationServices
     {
         public static void AddApplicationService(this IServiceCollection services)
@@ -21,6 +21,7 @@ namespace SharedNote.Application
             services.AddAutoMapper(assembly);
             services.AddMediatR(assembly);
             services.AddSingleton<ICacheManager, InMemoryCacheManager>();
+            services.AddSingleton<ITokenHelper, TokenHelper>();
         }
     }
 }

@@ -15,9 +15,9 @@ namespace SharedNote.Application.Caching
     {
         private readonly IMemoryCache _memoryCache;
         public IConfiguration _configuration { get; }
-        private static double _absoluteExpiration;
+        private readonly static double _absoluteExpiration = 240;
 
-        private MemoryCacheEntryOptions _options = new MemoryCacheEntryOptions
+        private MemoryCacheEntryOptions _options = new()
         {
             AbsoluteExpiration = DateTime.Now.AddMinutes(_absoluteExpiration),
             Priority = CacheItemPriority.Normal
@@ -25,7 +25,7 @@ namespace SharedNote.Application.Caching
         public InMemoryCacheManager(IMemoryCache memoryCache, IConfiguration configuration)
         {
             _memoryCache = memoryCache;
-            _absoluteExpiration = configuration.GetValue<double>("CacheConfiguration:AbsoluteExpiration");
+           // _absoluteExpiration = configuration;
         }
 
         public async Task<T> GetOrCreateAsync<T>(string key, Func<Task<T>> func, double? absoluteTime = null)
@@ -59,7 +59,7 @@ namespace SharedNote.Application.Caching
         {
             var cacheEntriesCollectionDefinition = typeof(MemoryCache).GetProperty("EntriesCollection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var cacheEntriesCollection = cacheEntriesCollectionDefinition.GetValue(_memoryCache) as dynamic;
-            List<ICacheEntry> cacheCollectionValues = new List<ICacheEntry>();
+            List<ICacheEntry> cacheCollectionValues = new();
 
             foreach (var cacheItem in cacheEntriesCollection)
             {

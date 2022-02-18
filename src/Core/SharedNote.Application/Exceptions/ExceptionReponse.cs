@@ -10,7 +10,9 @@ namespace SharedNote.Application.Exceptions
     {
         public bool IsSuccess { get; set; }
         public int StatusCode { get; set; }
+#nullable enable
         public string? Description { get; set; }
+#nullable disable
         public string Message { get; set; }
     }
 }

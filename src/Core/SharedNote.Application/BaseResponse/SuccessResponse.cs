@@ -10,10 +10,12 @@ namespace SharedNote.Application.BaseResponse
     {
         public string Message { get ; set; }
         public bool IsSuccess { get ; set; }
-        public SuccessResponse(string message)
+        public int StatusCode { get; set; }
+        public SuccessResponse(string message,int statusCode)
         {
             Message = message;
             IsSuccess = true;
+            StatusCode = statusCode;
         }
         public SuccessResponse()
         {

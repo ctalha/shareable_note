@@ -14,19 +14,21 @@ namespace SharedNotes.Persistence.Repositories.BaseRepositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         public UnitOfWork(ApplicationDbContext applicationDbContext)
         {
             _context = applicationDbContext;
-            collegeRepository = new CollegeRepository(_context);
-            departmentRepository = new DepartmentRespository(_context);
-            fileDocumentRespository = new FileDocumentRespository(_context);
+            CollegeRepository = new CollegeRepository(_context);
+            DepartmentRepository = new DepartmentRespository(_context);
+            FileDocumentRespository = new FileDocumentRespository(_context);
+            UserRepository = new UserRepository(_context);
         }
-        public ICollegeRepository collegeRepository { get; private set; }
+        public ICollegeRepository CollegeRepository { get; private set; }
 
-        public IDepartmentRepository departmentRepository { get; private set; }
+        public IDepartmentRepository DepartmentRepository { get; private set; }
 
-        public IFileDocumentRespository fileDocumentRespository { get; private set; }
+        public IFileDocumentRespository FileDocumentRespository { get; private set; }
+        public IUserRepository UserRepository { get; private set; }
 
         public async Task<bool> CompleteAsync()
         {

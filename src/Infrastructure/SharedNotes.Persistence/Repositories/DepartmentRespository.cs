@@ -22,6 +22,7 @@ namespace SharedNotes.Persistence.Repositories
         public async Task<List<Department>> GetAllDepartmentsByCollegeIdAsync(int id)
         {
             return await _context.Departments.Where(p => p.CollegeId == id).ToListAsync();
+
         }
     }
 }
