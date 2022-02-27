@@ -99,14 +99,23 @@ namespace SharedNote.Application.Helpers.File
 
         public static async Task<FileResponseModel> DownloadFileAsync(FileDocument fileDocument)
         {
+
             string path = fileDocument.FullPath;
 
             if (!System.IO.File.Exists(path)) 
-                throw new Exception("Dosya Bulunamadı");
+                throw new NullReferenceException("Dosya Bulunamadı");
 
             var bytes = await System.IO.File.ReadAllBytesAsync(path);
             return new FileResponseModel(bytes, fileDocument.ContentType, fileDocument.DocumentTitle);
 
+        }
+        public static bool DeleteFile(FileDocument fileDocument)
+        {
+            string path = fileDocument.FullPath;
+            if (!System.IO.File.Exists(path))
+                throw new NullReferenceException("Dosya Bulunamadı");
+            System.IO.File.Delete(path);
+            return true;
         }
     }
 }

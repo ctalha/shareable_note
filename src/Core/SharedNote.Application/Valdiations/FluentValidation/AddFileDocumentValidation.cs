@@ -16,8 +16,6 @@ namespace SharedNote.Application.Valdiations.FluentValidation
     {
         public AddFileDocumentValidation()
         {
-            RuleFor(p => p.File).NotEmpty().NotNull()
-                .WithMessage("Desteklenmeyen dosya türü");
             RuleFor(p => p.DepartmentId).NotNull().NotEmpty()
                 .WithMessage("Lütfen uygun bölümü seçiniz");
             RuleFor(p => p.CourseTitle).NotEmpty().NotNull()

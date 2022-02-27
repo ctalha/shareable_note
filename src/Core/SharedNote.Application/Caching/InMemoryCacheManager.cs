@@ -14,7 +14,7 @@ namespace SharedNote.Application.Caching
     public class InMemoryCacheManager : ICacheManager
     {
         private readonly IMemoryCache _memoryCache;
-        public IConfiguration _configuration { get; }
+        public IConfiguration Configuration { get; }
         private readonly static double _absoluteExpiration = 240;
 
         private MemoryCacheEntryOptions _options = new()
@@ -30,8 +30,7 @@ namespace SharedNote.Application.Caching
 
         public async Task<T> GetOrCreateAsync<T>(string key, Func<Task<T>> func, double? absoluteTime = null)
         {
-            T data;
-            if (_memoryCache.TryGetValue(key, out data))
+            if (_memoryCache.TryGetValue(key, out T data))
                 return data;
 
             var result = await func.Invoke();

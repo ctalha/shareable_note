@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SharedNote.Domain.Entites;
-using SharedNote.Application.Exceptions;
+
 
 namespace SharedNote.Application.CQRS.Queries
 {

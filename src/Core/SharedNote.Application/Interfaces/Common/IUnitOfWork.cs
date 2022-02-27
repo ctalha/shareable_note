@@ -13,6 +13,7 @@ namespace SharedNote.Application.Interfaces.Common
         IDepartmentRepository DepartmentRepository { get; }
         IFileDocumentRespository FileDocumentRespository { get; }
         IUserRepository UserRepository { get; }
+        IRoleRepository RoleRepository { get; }
         Task<bool> CompleteAsync();
 
     }

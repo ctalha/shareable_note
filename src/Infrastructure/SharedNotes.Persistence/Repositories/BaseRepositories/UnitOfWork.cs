@@ -29,6 +29,7 @@ namespace SharedNotes.Persistence.Repositories.BaseRepositories
 
         public IFileDocumentRespository FileDocumentRespository { get; private set; }
         public IUserRepository UserRepository { get; private set; }
+        public IRoleRepository RoleRepository { get; private set; }
 
         public async Task<bool> CompleteAsync()
         {

@@ -9,12 +9,15 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SharedNote.Application.Exceptions;
+using System.ComponentModel.DataAnnotations;
 
 namespace SharedNote.Application.CQRS.Queries
 {
     public class GetAllDepartmentByCollegeIdQueries : IRequest<IDataResponse<List<DepartmentDto>>>
     {
+        [Required(ErrorMessage = "Okul Id'si bilgisi boş olamaz")]
+        [Display(Name = "Okul Id")]
+
         public int CollegeId { get; set; }
         public class GetAllDepartmentByCollegeIdQueriesHandler : IRequestHandler<GetAllDepartmentByCollegeIdQueries, IDataResponse<List<DepartmentDto>>>
         {

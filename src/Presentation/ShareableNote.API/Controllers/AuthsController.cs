@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharedNote.Application.CQRS.Commands;
@@ -23,13 +24,14 @@ namespace ShareableNote.API.Controllers
         public async Task<IActionResult> Register(RegisterUserCommand command)
         {
             var result = await _mediator.Send(command);
-            return result.IsSuccess ? StatusCode(201, result) : StatusCode(400, result);
+            return StatusCode(result.StatusCode, result);
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserCommand command)
         {
             var result = await _mediator.Send(command);
-            return result.IsSuccess ? StatusCode(200, result) : StatusCode(result.StatusCode, result);
+            return StatusCode(result.StatusCode, result);
         }
     }
 }

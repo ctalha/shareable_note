@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SharedNote.Application.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,22 +40,14 @@ namespace SharedNote.Application.Middleware
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-
-            if(exception.GetType() == typeof(ValidationException))
+            if(exception.GetType() == typeof(NullReferenceException))
             {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var json = JsonConvert.SerializeObject(new ValidationExceptionResponse()
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(new ErrorDetails()
                 {
-                    StatusCode = 400,
-                    Errors = ((ValidationException)exception).Errors.ToList().Select(p => new ValidationResponse
-                    {
-                        PropertyName = p.PropertyName,
-                        ErrorMessage = p.ErrorMessage
-                    }),
-                    IsSuccess = false,
-                    Message = "Validation Error"
-                });
-                await context.Response.WriteAsync(json);
+                    StatusCode = context.Response.StatusCode,
+                    Message = exception.Message
+                }.ToString());
             }
 
             else

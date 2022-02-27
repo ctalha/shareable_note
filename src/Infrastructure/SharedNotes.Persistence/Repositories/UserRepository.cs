@@ -30,7 +30,7 @@ namespace SharedNotes.Persistence.Repositories
                              Roles = (from us in _context.UserRoles
                                       join r in _context.Roles on us.RoleId equals r.Id
                                       where us.UserId == u.Id
-                                      select r.Name).ToList()
+                                      select r.Name).FirstOrDefault()
                          };
             return result;
         }

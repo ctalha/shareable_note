@@ -20,9 +20,11 @@ namespace SharedNote.Application.CQRS.Queries
         public class GetAllUserQueriesHandler : IRequestHandler<GetAllUserQueries, IDataResponse<IQueryable<UserDto>>>
         {
             private readonly IUnitOfWork _unitOfWork;
+            private readonly UserManager<User> _userManager;
 
-            public GetAllUserQueriesHandler(IUnitOfWork unitOfWork)
+            public GetAllUserQueriesHandler(IUnitOfWork unitOfWork, UserManager<User> userManager)
             {
+                _userManager = userManager;
                 _unitOfWork = unitOfWork;
             }
             public async Task<IDataResponse<IQueryable<UserDto>>> Handle(GetAllUserQueries request, CancellationToken cancellationToken)

@@ -18,7 +18,7 @@ namespace SharedNote.Application.Security
         {
             _tokenOptions = options.Value;
         }
-        public JwtToken CreateToken(User user, string role)
+        public JwtToken CreateToken(User user, string role="member")
         {
             var accessTokenExpirations = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
 

@@ -28,23 +28,26 @@ namespace SharedNotes.Persistence.Repositories.BaseRepositories
 
         public Task DeleteAsync(TEntity entity)
         {
-
             _context.Remove(entity);
             return Task.CompletedTask;
         }
 
         public async Task<List<TEntity>> GetAllAsync()
         {
-            return await _context.Set<TEntity>().ToListAsync();         
+            return await _context.Set<TEntity>().AsNoTracking().ToListAsync();         
         }
         public async Task<TEntity> GetByIdAsync(int id)
         {
             return await _context.FindAsync<TEntity>(id);
         }
+        public async Task<TEntity> GetByIdAsync(string id)
+        {
+            return await _context.FindAsync<TEntity>(id);
+        }
         public TEntity UpdateAsync(TEntity entity)
         {
-
-            _context.Entry(entity).State = EntityState.Modified;
+            var model = _context.Entry(entity);
+            model.State = EntityState.Modified;
             return entity;
         }
 

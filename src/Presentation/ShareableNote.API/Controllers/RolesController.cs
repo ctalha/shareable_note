@@ -2,44 +2,42 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+using SharedNote.Application.CQRS.Commands;
 using SharedNote.Application.CQRS.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ShareableNote.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CollegesController : ControllerBase
+    public class RolesController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public CollegesController(IMediator mediator)
+        public RolesController(IMediator mediator)
         {
             _mediator = mediator;
         }
-
+        [Authorize(Roles ="admin")]
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllRoles()
         {
-            var result = await _mediator.Send(new GetAllCollegeQueries());
+            var result = await _mediator.Send(new GetAllRolesQueries());
             return StatusCode(result.StatusCode, result);
         }
-
-        [HttpGet("{id:int}")]     
-        public async Task<IActionResult> GetById(int id)
+        [Authorize(Roles ="admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddRole(AddRoleCommand command)
         {
-            var result = await _mediator.Send(new GetCollegeByIdQueries { Id = id});
+            var result  = await _mediator.Send(command);
             return StatusCode(result.StatusCode, result);
         }
-
-        [HttpGet("{id:int}/department")]
-        public async Task<IActionResult> GetWithDepartmentById(int id)
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteRole(string id)
         {
-            var result = await _mediator.Send(new GetCollegeWithDepartmentByIdQueries { Id = id });
+            var result = await _mediator.Send(new DeleteRoleCommand { Id = id });
             return StatusCode(result.StatusCode, result);
         }
     }

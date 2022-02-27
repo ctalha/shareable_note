@@ -18,11 +18,12 @@ namespace ShareableNote.API.Controllers
         {
             _mediator = mediator;
         }
+
         [HttpGet("college/{id:int}")]
         public async Task<IActionResult> GetAllDepartmentsByCollegeId(int id)
         {
             var result = await _mediator.Send(new GetAllDepartmentByCollegeIdQueries { CollegeId = id });
-            return result.IsSuccess ? StatusCode(200, result) : BadRequest(false);
+            return StatusCode(result.StatusCode, result);
         }
     }
 }

@@ -9,11 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace SharedNote.Application.CQRS.Queries
 {
     public class GetFileDocumentQueries : IRequest<IDataResponse<FileResponseModel>>
     {
+        [Required(ErrorMessage = "Dosya Id'si bilgisi boş olamaz")]
+        [Display(Name = "Dosya Id")]
         public int Id { get; set; }
 
         public class GetFileDocumentQueriesHandler : IRequestHandler<GetFileDocumentQueries, IDataResponse<FileResponseModel>>

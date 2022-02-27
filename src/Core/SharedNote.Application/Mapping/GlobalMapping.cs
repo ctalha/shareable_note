@@ -31,7 +31,17 @@ namespace SharedNote.Application.Mapping
                 .ForMember(p => p.UserName, opt => opt.MapFrom(s => s.Name))
                 .ForMember(p => p.Email, opt => opt.MapFrom(s => s.Email))
                 .ForMember(p => p.PasswordHash, opt => opt.MapFrom(s => s.Password)).ReverseMap();
-            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap()
+                .ForMember(p => p.Id, opt => opt.MapFrom(s => s.Id))
+                .ForMember(p => p.Email, opt => opt.MapFrom(s => s.Email))
+                .ForMember(p => p.UserName, opt => opt.MapFrom(s => s.UserName)).ReverseMap();
+            CreateMap<User, UpdateUserRoleCommand>().ReverseMap()
+                .ForMember(p => p.Id, opt => opt.MapFrom(s => s.Id))
+                .ForMember(p => p.Email, opt => opt.MapFrom(s => s.Email))
+                .ForMember(p => p.UserName, opt => opt.MapFrom(s => s.UserName)).ReverseMap();
+            CreateMap<AddFileDto, AddFileDocumentCommand>().ReverseMap();
+            CreateMap<UserRole, RoleResponseDto>().ReverseMap();
+            CreateMap<AddRoleCommand, UserRole>().ReverseMap();
 
         }
     }

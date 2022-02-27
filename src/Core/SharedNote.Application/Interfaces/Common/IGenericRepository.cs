@@ -15,6 +15,6 @@ namespace SharedNote.Application.Interfaces.Common
         Task DeleteAsync(TEntity entity);
         Task<List<TEntity>> GetAllAsync();
         Task<TEntity> GetByIdAsync(int id);
-
+        Task<TEntity> GetByIdAsync(string id);
     }
 }

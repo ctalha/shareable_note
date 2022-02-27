@@ -8,6 +8,7 @@ using SharedNote.Application.Security;
 using SharedNote.Domain.Entites;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,8 +18,19 @@ namespace SharedNote.Application.CQRS.Commands
 {
     public class RegisterUserCommand : IRequest<IDataResponse<TokenDto>>
     {
+        [Display(Name ="İsim")]
+        [Required(ErrorMessage = "Kullanıcı ismi boş olamaz.")]
         public string Name { get; set; }
+
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Email boş olamaz.")]
+        [EmailAddress(ErrorMessage = "Email adresi doğru formatta değil.")]
         public string Email { get; set; }
+
+
+        [Required(ErrorMessage = "Şifre boş olamaz")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Şifre")]
         public string Password { get; set; }
 
         public class CreateUserCommandHander : IRequestHandler<RegisterUserCommand, IDataResponse<TokenDto>>
@@ -45,6 +57,7 @@ namespace SharedNote.Application.CQRS.Commands
                     await _roleManager.CreateAsync(new UserRole { Name = "member" });
 
                 var dest = _mapper.Map<User>(request);
+                dest.CreateDate = DateTime.Now;
                 var result = await _userManager.CreateAsync(dest, request.Password);
 
                 if (!result.Succeeded)
@@ -52,14 +65,13 @@ namespace SharedNote.Application.CQRS.Commands
 
                 await _userManager.AddToRoleAsync(dest, "member");
 
-
                 var jwt = _tokenHelper.CreateToken(dest, "member");
 
                 return new SuccessDataResponse<TokenDto>(new TokenDto 
                 {
                     Token = jwt.Token,
                     Expiration = jwt.Expirations
-                },"Kullanıcı başarılı bir şekilde kayıt edildi",201);
+                },"Kullancı kayıt edildi",201);
                 
             }
         }
