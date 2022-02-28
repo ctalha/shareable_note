@@ -4,10 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Dtos;
 using SharedNote.Domain.Entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,11 +25,11 @@ namespace SharedNote.Application.CQRS.Commands
             {
                 var dest = _mapper.Map<UserRole>(request);
                 var role = await _roleManager.FindByNameAsync(dest.Name);
-                if (role != null) return new ErrorDataResponse<RoleResponseDto>(null,"Role kaydedilemedi, aynı isimde role bulunmaktadır", 400);
-                var result =  await _roleManager.CreateAsync(dest);
+                if (role != null) return new ErrorDataResponse<RoleResponseDto>(null, "Role kaydedilemedi, aynı isimde role bulunmaktadır", 400);
+                var result = await _roleManager.CreateAsync(dest);
                 var user = await _roleManager.FindByNameAsync(request.Name);
                 var resultDest = _mapper.Map<RoleResponseDto>(user);
-                return new SuccessDataResponse<RoleResponseDto>(resultDest, "Role başarılı bir şekilde oluşturuldu.",201);
+                return new SuccessDataResponse<RoleResponseDto>(resultDest, "Role başarılı bir şekilde oluşturuldu.", 201);
             }
         }
     }

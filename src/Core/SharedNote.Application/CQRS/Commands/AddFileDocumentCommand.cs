@@ -2,19 +2,15 @@
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Helpers.File;
 using SharedNote.Application.Interfaces.Common;
-using SharedNote.Application.BaseResponse;
 using SharedNote.Domain.Entites;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 
 namespace SharedNote.Application.CQRS.Commands
 {
@@ -22,8 +18,8 @@ namespace SharedNote.Application.CQRS.Commands
     {
         //[Display(Name = "Dosya")]
         //[Required(ErrorMessage = "Yüklenecek dosya gereklidir.")]
-      //  [FileExtensions(Extensions = "jpg,png,pdf,odt,txt,7z,zip",ErrorMessage = "Desteklenmeyen dosya türü, lütfen .jpg, .png, .pdf, .odt, .txt, .7z, .zip dosya türü kullanın")]
-        
+        //  [FileExtensions(Extensions = "jpg,png,pdf,odt,txt,7z,zip",ErrorMessage = "Desteklenmeyen dosya türü, lütfen .jpg, .png, .pdf, .odt, .txt, .7z, .zip dosya türü kullanın")]
+
         public IFormFile File { get; set; }
 
         [Display(Name = "Kurs")]
@@ -44,7 +40,7 @@ namespace SharedNote.Application.CQRS.Commands
             private readonly IMapper _mapper;
             private readonly ICacheManager _cacheManager;
             private readonly UserManager<User> _userManager;
-            public AddFileDocumentCommandHandler(IHostingEnvironment env, IUnitOfWork unitOfWork, IMapper mapper, ICacheManager cacheManager,UserManager<User> userManager)
+            public AddFileDocumentCommandHandler(IHostingEnvironment env, IUnitOfWork unitOfWork, IMapper mapper, ICacheManager cacheManager, UserManager<User> userManager)
             {
                 _env = env;
                 _unitOfWork = unitOfWork;
@@ -52,13 +48,13 @@ namespace SharedNote.Application.CQRS.Commands
                 _cacheManager = cacheManager;
                 _userManager = userManager;
             }
-           
+
             public async Task<IResponse> Handle(AddFileDocumentCommand request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByIdAsync(request.UserId);
-                if (user == null) return new ErrorResponse("Email veya şifre hatalıdır.",404);
+                if (user == null) return new ErrorResponse("Email veya şifre hatalıdır.", 404);
 
-                var fileModel = FileHelper.Upload(request.File,_env);
+                var fileModel = FileHelper.Upload(request.File, _env);
 
                 var dest = _mapper.Map(fileModel, _mapper.Map<AddFileDocumentCommand, FileDocument>(request));
                 dest.DocumentTitle = request.File.FileName;
@@ -72,10 +68,10 @@ namespace SharedNote.Application.CQRS.Commands
                 if (result)
                 {
                     _cacheManager.RemoveSameCache("FileDocument");
-                    return new SuccessResponse("Dosya Yüklendi",200);
+                    return new SuccessResponse("Dosya Yüklendi", 200);
                 }
-                return new ErrorResponse("Dosya Yüklenemedi",200);
-                
+                return new ErrorResponse("Dosya Yüklenemedi", 200);
+
             }
         }
     }

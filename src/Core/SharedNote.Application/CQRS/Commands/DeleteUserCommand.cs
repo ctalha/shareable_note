@@ -1,20 +1,16 @@
 ﻿using MediatR;
 using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Interfaces.Common;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SharedNote.Application.CQRS.Commands
 {
-    public class DeleteUserCommand:IRequest<IResponse>
+    public class DeleteUserCommand : IRequest<IResponse>
     {
         [Display(Name = "Kullanıcı")]
-        [Required(ErrorMessage ="Kullanıcı bilgisi gereklidir.")]
+        [Required(ErrorMessage = "Kullanıcı bilgisi gereklidir.")]
         public string UserId { get; set; }
         public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, IResponse>
         {

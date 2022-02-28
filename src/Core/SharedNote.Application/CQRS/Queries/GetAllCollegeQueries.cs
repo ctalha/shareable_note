@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Dtos;
 using SharedNote.Application.Interfaces.Common;
-using SharedNote.Application.Interfaces.Repositories;
-using SharedNote.Application.BaseResponse;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SharedNote.Domain.Entites;
 
 
 namespace SharedNote.Application.CQRS.Queries
@@ -37,10 +32,10 @@ namespace SharedNote.Application.CQRS.Queries
                 });
                 if (result == null)
                 {
-                    return new ErrorDataResponse<List<CollegeDto>>(null,"Üniversiteler Bulunamadı",404);
+                    return new ErrorDataResponse<List<CollegeDto>>(null, "Üniversiteler Bulunamadı", 404);
                 }
                 var dest = _mapper.Map<List<CollegeDto>>(result);
-                return new SuccessDataResponse<List<CollegeDto>>(dest, "Tüm üniversiteler getirildi",200);
+                return new SuccessDataResponse<List<CollegeDto>>(dest, "Tüm üniversiteler getirildi", 200);
             }
         }
     }

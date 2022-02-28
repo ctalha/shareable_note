@@ -1,13 +1,9 @@
-﻿using SharedNote.Application.Interfaces.Common;
+﻿using Microsoft.EntityFrameworkCore;
 using SharedNote.Application.Interfaces.Repositories;
 using SharedNote.Domain.Entites;
 using SharedNotes.Persistence.Context;
 using SharedNotes.Persistence.Repositories.BaseRepositories;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace SharedNotes.Persistence.Repositories

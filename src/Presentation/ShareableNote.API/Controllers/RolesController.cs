@@ -1,12 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharedNote.Application.CQRS.Commands;
 using SharedNote.Application.CQRS.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShareableNote.API.Controllers
@@ -20,18 +16,18 @@ namespace ShareableNote.API.Controllers
         {
             _mediator = mediator;
         }
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllRoles()
         {
             var result = await _mediator.Send(new GetAllRolesQueries());
             return StatusCode(result.StatusCode, result);
         }
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddRole(AddRoleCommand command)
         {
-            var result  = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
             return StatusCode(result.StatusCode, result);
         }
         [HttpDelete("{id:guid}")]

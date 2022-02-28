@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using SharedNote.Application.Middleware;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharedNote.Application
 {

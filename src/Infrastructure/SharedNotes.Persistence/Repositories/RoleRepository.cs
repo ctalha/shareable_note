@@ -2,11 +2,6 @@
 using SharedNote.Domain.Entites;
 using SharedNotes.Persistence.Context;
 using SharedNotes.Persistence.Repositories.BaseRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharedNotes.Persistence.Repositories
 {
@@ -14,7 +9,7 @@ namespace SharedNotes.Persistence.Repositories
     {
         public RoleRepository(ApplicationDbContext context) : base(context)
         {
-            
+
         }
     }
 }

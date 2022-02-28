@@ -4,8 +4,6 @@ using SharedNote.Application.Interfaces.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -26,7 +24,7 @@ namespace SharedNote.Application.Caching
         public InMemoryCacheManager(IMemoryCache memoryCache, IConfiguration configuration)
         {
             _memoryCache = memoryCache;
-           // _absoluteExpiration = configuration;
+            // _absoluteExpiration = configuration;
         }
 
         public async Task<T> GetOrCreateAsync<T>(string key, Func<Task<T>> func, double? absoluteTime = null)
@@ -39,7 +37,7 @@ namespace SharedNote.Application.Caching
             if (absoluteTime != null)
                 _options.AbsoluteExpiration = DateTime.Now.AddMinutes(absoluteTime.Value);
 
-            _memoryCache.Set(key, result,_options);
+            _memoryCache.Set(key, result, _options);
 
             if (result == null)
                 _memoryCache.Remove(key);

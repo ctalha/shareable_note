@@ -1,18 +1,13 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SharedNote.Application.BaseResponse;
 using SharedNote.Domain.Entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SharedNote.Application.CQRS.Commands
 {
-    public class DeleteRoleCommand :  IRequest<IResponse>
+    public class DeleteRoleCommand : IRequest<IResponse>
     {
         public string Id { get; set; }
         public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, IResponse>
@@ -29,11 +24,11 @@ namespace SharedNote.Application.CQRS.Commands
                 var role = await _roleManager.FindByIdAsync(request.Id);
                 if (role == null) return new ErrorResponse("Role bulunamadı, role silme işlemi başarız oldu.", 404);
                 var users = await _userManager.GetUsersInRoleAsync(role.Name);
-                if(users.Count > 0)
+                if (users.Count > 0)
                 {
                     foreach (var user in users)
                     {
-                        await _userManager.AddToRoleAsync(user,"member");
+                        await _userManager.AddToRoleAsync(user, "member");
                     }
                 }
                 var result = await _roleManager.DeleteAsync(role);

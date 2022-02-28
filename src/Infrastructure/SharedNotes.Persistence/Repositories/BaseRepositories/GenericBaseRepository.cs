@@ -2,10 +2,7 @@
 using SharedNote.Application.Interfaces.Common;
 using SharedNote.Domain.Common;
 using SharedNotes.Persistence.Context;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SharedNotes.Persistence.Repositories.BaseRepositories
@@ -34,7 +31,7 @@ namespace SharedNotes.Persistence.Repositories.BaseRepositories
 
         public async Task<List<TEntity>> GetAllAsync()
         {
-            return await _context.Set<TEntity>().AsNoTracking().ToListAsync();         
+            return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
         }
         public async Task<TEntity> GetByIdAsync(int id)
         {

@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using SharedNote.Domain.Entites;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SharedNote.Application.Helpers.File
@@ -61,7 +58,7 @@ namespace SharedNote.Application.Helpers.File
 
                 throw new NullReferenceException("Dosya boş olamaz");
             }
-          
+
         }
         public static string CreateFolder(string folder, string guid)
         {
@@ -102,7 +99,7 @@ namespace SharedNote.Application.Helpers.File
 
             string path = fileDocument.FullPath;
 
-            if (!System.IO.File.Exists(path)) 
+            if (!System.IO.File.Exists(path))
                 throw new NullReferenceException("Dosya Bulunamadı");
 
             var bytes = await System.IO.File.ReadAllBytesAsync(path);

@@ -1,18 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SharedNote.Application.Dtos;
+﻿using SharedNote.Application.Dtos;
 using SharedNote.Application.Interfaces.Repositories;
 using SharedNote.Domain.Entites;
 using SharedNotes.Persistence.Context;
 using SharedNotes.Persistence.Repositories.BaseRepositories;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharedNotes.Persistence.Repositories
 {
-    public class UserRepository : GenericBaseRepository<User> , IUserRepository
+    public class UserRepository : GenericBaseRepository<User>, IUserRepository
     {
         private readonly ApplicationDbContext _context;
         public UserRepository(ApplicationDbContext context) : base(context)

@@ -4,11 +4,7 @@ using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Dtos;
 using SharedNote.Application.Security;
 using SharedNote.Domain.Entites;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,21 +12,21 @@ namespace SharedNote.Application.CQRS.Commands
 {
     public class LoginUserCommand : IRequest<IDataResponse<TokenDto>>
     {
-        [Required(ErrorMessage ="E-mail boş olamaz")]
+        [Required(ErrorMessage = "E-mail boş olamaz")]
         [EmailAddress(ErrorMessage = "E-mail doğru formatta olmalıdır")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Şifre boş olamaz")]
         [DataType(DataType.Password)]
-        [Display(Name ="Şifre")]
+        [Display(Name = "Şifre")]
         public string Password { get; set; }
 
         public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, IDataResponse<TokenDto>>
         {
             private readonly UserManager<User> _userManager;
             private readonly ITokenHelper _tokenHelper;
-            public LoginUserCommandHandler(UserManager<User> userManager,ITokenHelper tokenHelper)
+            public LoginUserCommandHandler(UserManager<User> userManager, ITokenHelper tokenHelper)
             {
                 _userManager = userManager;
                 _tokenHelper = tokenHelper;
@@ -50,10 +46,10 @@ namespace SharedNote.Application.CQRS.Commands
                     Token = jwt.Token,
                     Expiration = jwt.Expirations
                 }, 200);
-                
 
 
-                
+
+
             }
         }
     }

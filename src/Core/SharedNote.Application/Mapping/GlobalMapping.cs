@@ -3,11 +3,6 @@ using SharedNote.Application.CQRS.Commands;
 using SharedNote.Application.Dtos;
 using SharedNote.Application.Helpers.File;
 using SharedNote.Domain.Entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharedNote.Application.Mapping
 {

@@ -1,15 +1,10 @@
 ﻿using MediatR;
+using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Helpers.File;
 using SharedNote.Application.Interfaces.Common;
-using SharedNote.Application.BaseResponse;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
 namespace SharedNote.Application.CQRS.Queries
 {
@@ -30,8 +25,9 @@ namespace SharedNote.Application.CQRS.Queries
             public async Task<IDataResponse<FileResponseModel>> Handle(GetFileDocumentQueries request, CancellationToken cancellationToken)
             {
                 var result = await _unitOfWork.FileDocumentRespository.GetByIdAsync(request.Id);
+                if (result == null) return new ErrorDataResponse<FileResponseModel>(null, "Dosya Bulunamadı.", 404);
                 var data = await FileHelper.DownloadFileAsync(result);
-                return new SuccessDataResponse<FileResponseModel>(data,200);
+                return new SuccessDataResponse<FileResponseModel>(data, 200);
             }
         }
     }

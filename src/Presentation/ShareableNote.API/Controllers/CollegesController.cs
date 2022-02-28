@@ -1,13 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using SharedNote.Application.CQRS.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ShareableNote.API.Controllers
@@ -29,10 +22,10 @@ namespace ShareableNote.API.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("{id:int}")]     
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _mediator.Send(new GetCollegeByIdQueries { Id = id});
+            var result = await _mediator.Send(new GetCollegeByIdQueries { Id = id });
             return StatusCode(result.StatusCode, result);
         }
 

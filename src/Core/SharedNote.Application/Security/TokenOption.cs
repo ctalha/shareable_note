@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SharedNote.Application.Security
+﻿namespace SharedNote.Application.Security
 {
     public class TokenOption
     {

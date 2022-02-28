@@ -1,22 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Serilog;
 using SharedNote.Application.Helpers.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SharedNote.Application.Middleware
 {
     public class RequestResponseLoggingMiddleware
     {
-        
+
         private readonly RequestDelegate _next;
         private static LoggingResponse loggingResponse = new();
         Stopwatch stopwatch = new();
@@ -28,7 +23,7 @@ namespace SharedNote.Application.Middleware
         public async Task Invoke(HttpContext context)
         {
             stopwatch.Restart();
-            stopwatch.Start();   
+            stopwatch.Start();
             //First, get the incoming request
             var request = await FormatRequest(context.Request);
 
@@ -40,25 +35,25 @@ namespace SharedNote.Application.Middleware
             //Create a new memory stream...
             using var responseBody = new MemoryStream();
 
-                //...and use that for the temporary response body
-                context.Response.Body = responseBody;
+            //...and use that for the temporary response body
+            context.Response.Body = responseBody;
 
-                //Continue down the Middleware pipeline, eventually returning to this class
-                await _next(context);
+            //Continue down the Middleware pipeline, eventually returning to this class
+            await _next(context);
 
-                //Format the response from the server
-                var response = await FormatResponse(context.Response);
+            //Format the response from the server
+            var response = await FormatResponse(context.Response);
 
-                //TODO: Save log to chosen datastore
-                loggingResponse.Response = response;
+            //TODO: Save log to chosen datastore
+            loggingResponse.Response = response;
 
-                stopwatch.Stop();
+            stopwatch.Stop();
 
-                loggingResponse.ElapsedMilliseconds =  stopwatch.ElapsedMilliseconds;
-                //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
-                Log.Information("R-R");
-                Log.Information("Request-Reponse {@LoggingInformation}", loggingResponse);
-                await responseBody.CopyToAsync(originalBodyStream);
+            loggingResponse.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            //Copy the contents of the new memory stream (which contains the response) to the original stream, which is then returned to the client.
+            Log.Information("R-R");
+            Log.Information("Request-Reponse {@LoggingInformation}", loggingResponse);
+            await responseBody.CopyToAsync(originalBodyStream);
 
         }
 
@@ -94,7 +89,7 @@ namespace SharedNote.Application.Middleware
 
                 await request.Body.ReadAsync(buff, 0, buff.Length);
 
-                var result =  Encoding.UTF8.GetString(buff);
+                var result = Encoding.UTF8.GetString(buff);
 
                 return $"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {result}";
             }

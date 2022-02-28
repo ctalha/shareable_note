@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharedNote.Application.Dtos
 {
@@ -12,7 +7,7 @@ namespace SharedNote.Application.Dtos
     {
         //[Display(Name = "Dosya")]
         //[Required(ErrorMessage = "Dosya Bilgisi Bulunmalıdır.")]
-       // [RegularExpression(@"([a-zA-Z0-9\s_\\.\-:])+(.png|.jpg|.gif|.jpeg|.odt|.txt|.7z|.zip|.pdf)$", ErrorMessage = "Desteklenmeyen dosya türü, lütfen jpg,jpeg,pdf,odt,txt,7z,zip uzantılı dosylar kullanın.")]
+        // [RegularExpression(@"([a-zA-Z0-9\s_\\.\-:])+(.png|.jpg|.gif|.jpeg|.odt|.txt|.7z|.zip|.pdf)$", ErrorMessage = "Desteklenmeyen dosya türü, lütfen jpg,jpeg,pdf,odt,txt,7z,zip uzantılı dosylar kullanın.")]
         public IFormFile File { get; set; }
 
         [Display(Name = "Kurs")]

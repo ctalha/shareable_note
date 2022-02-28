@@ -1,14 +1,6 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using SharedNote.Application.CQRS.Commands;
-using SharedNote.Application.Dtos;
 using SharedNote.Application.Valdiations.FluentValidation.BaseValidator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SharedNote.Application.Valdiations.FluentValidation
 {

@@ -1,17 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Transactions;
-using FluentValidation;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using SharedNote.Application.Valdiations.FluentValidation;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SharedNote.Application.Middleware
 {
@@ -40,7 +31,7 @@ namespace SharedNote.Application.Middleware
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            if(exception.GetType() == typeof(NullReferenceException))
+            if (exception.GetType() == typeof(NullReferenceException))
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(new ErrorDetails()

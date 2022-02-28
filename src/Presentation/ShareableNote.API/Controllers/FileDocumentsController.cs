@@ -1,18 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SharedNote.Application.CQRS.Commands;
 using SharedNote.Application.CQRS.Queries;
 using SharedNote.Application.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -47,7 +39,7 @@ namespace ShareableNote.API.Controllers
             var result = await _mediator.Send(new GetFileDocumentQueries { Id = id });
             if (result.IsSuccess)
                 return File(result.Data.FileContext, result.Data.ContentType, result.Data.FileName);
-            return BadRequest();
+            return StatusCode(result.StatusCode,result);
         }
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)

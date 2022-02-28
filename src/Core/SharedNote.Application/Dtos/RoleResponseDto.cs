@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SharedNote.Application.Dtos
+﻿namespace SharedNote.Application.Dtos
 {
-    public class RoleResponseDto 
+    public class RoleResponseDto
     {
         public string Id { get; set; }
         public string Name { get; set; }

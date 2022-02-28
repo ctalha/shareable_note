@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Dtos;
 using SharedNote.Application.Interfaces.Common;
-using SharedNote.Application.BaseResponse;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-
-using System.ComponentModel.DataAnnotations;
 
 namespace SharedNote.Application.CQRS.Queries
 {
@@ -32,16 +27,16 @@ namespace SharedNote.Application.CQRS.Queries
             }
             public async Task<IDataResponse<CollegeDto>> Handle(GetCollegeByIdQueries request, CancellationToken cancellationToken)
             {
-                var result = await _cacheManager.GetOrCreateAsync("college_get_by_"+request.Id, async () =>
-                {
-                    return await _unitOfWork.CollegeRepository.GetByIdAsync(request.Id);
-                });
+                var result = await _cacheManager.GetOrCreateAsync("college_get_by_" + request.Id, async () =>
+                  {
+                      return await _unitOfWork.CollegeRepository.GetByIdAsync(request.Id);
+                  });
                 if (result == null)
                 {
                     return new ErrorDataResponse<CollegeDto>(null, "Üniversite bulunamadı.", 404);
                 }
                 var dest = _mapper.Map<CollegeDto>(result);
-                return new SuccessDataResponse<CollegeDto>(dest, "İstenilen üniversite getirildi",200);
+                return new SuccessDataResponse<CollegeDto>(dest, "İstenilen üniversite getirildi", 200);
             }
         }
     }

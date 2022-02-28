@@ -2,10 +2,6 @@
 using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Helpers.File;
 using SharedNote.Application.Interfaces.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +19,7 @@ namespace SharedNote.Application.CQRS.Commands
             }
             public async Task<IResponse> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
             {
-                var file = await  _unitOfWork.FileDocumentRespository.GetByIdAsync(request.Id);
+                var file = await _unitOfWork.FileDocumentRespository.GetByIdAsync(request.Id);
                 if (file == null)
                     return new ErrorResponse("Dosya Bulunamadı", 404);
                 await _unitOfWork.FileDocumentRespository.DeleteAsync(file);
@@ -34,7 +30,7 @@ namespace SharedNote.Application.CQRS.Commands
                         return new ErrorResponse("Dosya Silinemedi", 400);
                 }
                 return new SuccessResponse("Dosya başarılı bir şekilde silindi", 204);
-                       
+
             }
         }
     }

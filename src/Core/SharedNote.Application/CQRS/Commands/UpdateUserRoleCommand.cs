@@ -1,39 +1,33 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Dtos;
-using SharedNote.Application.Interfaces.Common;
 using SharedNote.Domain.Entites;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 
 namespace SharedNote.Application.CQRS.Commands
 {
-    public class UpdateUserRoleCommand :  IRequest<IDataResponse<UserDto>>
+    public class UpdateUserRoleCommand : IRequest<IDataResponse<UserDto>>
     {
-        [Display(Name ="Id")]
-        [Required(ErrorMessage ="Id bilgisi boş olamaz.")]
+        [Display(Name = "Id")]
+        [Required(ErrorMessage = "Id bilgisi boş olamaz.")]
         public string Id { get; set; }
-        [Display(Name ="Kullanıcı ismi")]
-        [Required(ErrorMessage ="Kullanıcı ismi boş olamaz.")]
+        [Display(Name = "Kullanıcı ismi")]
+        [Required(ErrorMessage = "Kullanıcı ismi boş olamaz.")]
         public string UserName { get; set; }
 
-        [Display(Name ="Email")]
-        [Required(ErrorMessage ="Email bilgisi boş olamaz.")]
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Email bilgisi boş olamaz.")]
         [EmailAddress(ErrorMessage = "Email doğru formatta değil.")]
         public string Email { get; set; }
 
-        [Display(Name ="Role")]
-        [Required(ErrorMessage ="Role bilgisi boş olamaz")]
+        [Display(Name = "Role")]
+        [Required(ErrorMessage = "Role bilgisi boş olamaz")]
         public string Role { get; set; }
         public class UpdateUserRoleCommandHandler : IRequestHandler<UpdateUserRoleCommand, IDataResponse<UserDto>>
         {
@@ -66,24 +60,24 @@ namespace SharedNote.Application.CQRS.Commands
                             scope.Complete();
                             return new SuccessDataResponse<UserDto>(null, "Kullanıcı Güncellenemedi", 400);
                         }
-                            
+
 
                         var updatedUser = await _userManager.FindByIdAsync(request.Id);
 
                         var dest = _mapper.Map<UserDto>(updatedUser);
                         dest.Roles = request.Role;
-                        if (await _userManager.IsInRoleAsync(updatedUser, request.Role)) 
+                        if (await _userManager.IsInRoleAsync(updatedUser, request.Role))
                         {
                             scope.Complete();
                             return new SuccessDataResponse<UserDto>(dest, "Kullanıcı Güncellendi", 200);
-                        } 
+                        }
 
                         var existRole = await _roleManager.FindByNameAsync(request.Role);
-                        if (existRole == null) 
+                        if (existRole == null)
                         {
                             scope.Dispose();
                             return new ErrorDataResponse<UserDto>(null, $@"{request.Role} adında bir role bulunmamaktadır. Kullanıcı güncellenemedi.", 400);
-                        } 
+                        }
 
                         var roles = await _userManager.GetRolesAsync(updatedUser);
                         if (roles.Count > 0)
@@ -95,10 +89,10 @@ namespace SharedNote.Application.CQRS.Commands
                         if (!IsAddRole.Succeeded)
                         {
                             scope.Dispose();
-                            return new ErrorDataResponse<UserDto>(null,"Kullanıcı güncellenemedi.", 400);
+                            return new ErrorDataResponse<UserDto>(null, "Kullanıcı güncellenemedi.", 400);
                         }
-                            
-                        var userRole =  await _userManager.GetRolesAsync(updatedUser);
+
+                        var userRole = await _userManager.GetRolesAsync(updatedUser);
                         dest.Roles = userRole[0];
                         scope.Complete();
                         return new SuccessDataResponse<UserDto>(dest, "Kullanıcı güncellendi", 200);

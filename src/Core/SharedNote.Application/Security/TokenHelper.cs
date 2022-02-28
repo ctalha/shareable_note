@@ -4,10 +4,8 @@ using SharedNote.Domain.Entites;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SharedNote.Application.Security
 {
@@ -18,7 +16,7 @@ namespace SharedNote.Application.Security
         {
             _tokenOptions = options.Value;
         }
-        public JwtToken CreateToken(User user, string role="member")
+        public JwtToken CreateToken(User user, string role = "member")
         {
             var accessTokenExpirations = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
 
@@ -32,7 +30,7 @@ namespace SharedNote.Application.Security
                 expires: accessTokenExpirations,
                 notBefore: DateTime.Now,
                 signingCredentials: signingCredentials,
-                claims:GetClaims(user,role)
+                claims: GetClaims(user, role)
                 );
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -55,7 +53,7 @@ namespace SharedNote.Application.Security
                 new Claim(ClaimTypes.Role,role)
             };
             //claims.AddRange(roles.Select(p => new Claim(ClaimTypes.Role, p)));
-            
+
             return claims;
         }
     }

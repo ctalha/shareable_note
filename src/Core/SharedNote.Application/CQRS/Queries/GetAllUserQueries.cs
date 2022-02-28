@@ -1,15 +1,10 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Dtos;
 using SharedNote.Application.Interfaces.Common;
 using SharedNote.Domain.Entites;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

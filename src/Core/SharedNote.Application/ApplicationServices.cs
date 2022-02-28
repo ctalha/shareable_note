@@ -1,15 +1,10 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using SharedNote.Application.Interfaces.Common;
 using SharedNote.Application.Caching;
+using SharedNote.Application.Interfaces.Common;
 using SharedNote.Application.Security;
+using System.Reflection;
 
 namespace SharedNote.Application
 {

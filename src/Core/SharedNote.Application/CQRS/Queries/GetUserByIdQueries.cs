@@ -5,11 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using SharedNote.Application.BaseResponse;
 using SharedNote.Application.Dtos;
 using SharedNote.Domain.Entites;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
