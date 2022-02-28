@@ -53,7 +53,7 @@ namespace ShareableNote.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteFileCommand { Id = id });
-            return StatusCode(result.StatusCode, result);
+            return StatusCode(result.StatusCode);
         }
 
     }

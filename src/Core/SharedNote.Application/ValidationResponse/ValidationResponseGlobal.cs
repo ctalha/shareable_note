@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace ShareableNote.API.Validation
+namespace SharedNote.Application.ValidationResponse
 {
     public class ValidationResponseGlobal
     {

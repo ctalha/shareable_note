@@ -15,6 +15,7 @@ namespace SharedNote.Application.Caching
     {
         private readonly IMemoryCache _memoryCache;
         public IConfiguration Configuration { get; }
+
         private readonly static double _absoluteExpiration = 240;
 
         private MemoryCacheEntryOptions _options = new()
